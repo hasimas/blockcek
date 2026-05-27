@@ -859,6 +859,47 @@
     padding: 5px 12px;
     margin-bottom: 14px;
   }
+
+  /* Manual-fallback explainer + open button helpers */
+  .callout-why {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--coral);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 4px 0 20px;
+  }
+  .callout-why strong { color: var(--ink); font-weight: 500; }
+  .callout-why em {
+    font-style: italic;
+    color: var(--coral-deep);
+    font-weight: 400;
+  }
+
+  .link-hint {
+    font-size: 13px;
+    color: var(--ink-fade);
+    line-height: 1.6;
+    margin: 12px 0 24px;
+  }
+  .link-hint strong { color: var(--ink-soft); font-weight: 500; }
+
+  .link-inline {
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--coral-deep);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+  .link-inline:hover { color: var(--coral); }
 </style>
 </head>
 <body>
@@ -1146,20 +1187,22 @@
     const html = `
       <div class="result-card" id="linkCard">
         <div class="fallback-tag">Auto-check unavailable — quick manual check</div>
-        <h2>Check this in a <em>private window</em>, then come back.</h2>
-        <p>Copy the URL below and open it in a private / incognito window on this device. The page will still be here when you return.</p>
+        <h2>Look at their profile <em>without your account</em>.</h2>
 
-        <div class="url-block" id="urlBlock">${url}</div>
+        <p class="callout-why">
+          <strong>Why a private window?</strong> A block hides them from <em>you</em>, not from the rest of the internet. To tell, we need to see what a stranger sees \u2014 and a private / incognito window has no login, so it shows the public view.
+        </p>
 
         <div class="link-row">
-          <button type="button" class="open-link" id="copyPrimary" onclick="copyUrl()">
+          <a href="${url}" target="_blank" rel="noopener noreferrer" class="open-link" id="openProfileBtn">
+            <span>Open ${pName} profile</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="11" height="11" rx="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              <path d="M7 17L17 7M17 7H8M17 7V16"/>
             </svg>
-            <span id="copyLabel">Copy URL</span>
-          </button>
-          <span style="font-size:13px;color:var(--ink-fade);">Then paste into a private window \u2014 <kbd>Cmd/Ctrl + Shift + N</kbd></span>
+          </a>
+        </div>
+        <div class="link-hint">
+          <strong>Right-click the button \u2192 \u201cOpen in Private Window\u201d</strong> so your login doesn\u2019t follow you in. Or open a private window first (<kbd>Cmd/Ctrl + Shift + N</kbd>) and click it there. <button type="button" class="link-inline" onclick="copyUrl()"><span id="copyLabel">Or copy URL</span></button>
         </div>
 
         <div class="question-prompt">When you\u2019ve looked \u2014 what did you see on ${pName}?</div>
@@ -1196,9 +1239,9 @@
   function copyUrl() {
     const url = buildProfileUrl();
     const label = document.getElementById('copyLabel');
+    const original = label ? label.textContent : 'Copy URL';
     const finish = (ok) => {
       if (!label) return;
-      const original = 'Copy URL';
       label.textContent = ok ? 'Copied \u2713' : 'Press Ctrl+C';
       setTimeout(() => { label.textContent = original; }, 1600);
     };
