@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Did they block you? — Check if you've been blocked on Instagram or TikTok</title>
+<meta name="description" content="A simple, honest check to see if someone blocked you on Instagram or TikTok. No login, no scraping, no data collected." />
+<meta name="theme-color" content="#FAF5EA" />
+
+<meta property="og:title" content="Did they block you?" />
+<meta property="og:description" content="A simple, honest check to see if someone blocked you on Instagram or TikTok." />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:opsz,wght@9..40,300..700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #FAF5EA;
+    --paper-shadow: #F0E9D7;
+    --ink: #1C1814;
+    --ink-soft: #4A4239;
+    --ink-fade: #8A8275;
+    --coral: #C84D3A;
+    --coral-deep: #A53A29;
+    --sage: #6B8068;
+    --rule: #D9CFB8;
+    --card: #FFFDF7;
+    --shadow: 0 1px 2px rgba(28, 24, 20, 0.04), 0 8px 24px rgba(28, 24, 20, 0.06);
+    --shadow-lift: 0 2px 4px rgba(28, 24, 20, 0.06), 0 16px 40px rgba(28, 24, 20, 0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(200, 77, 58, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 60%, rgba(107, 128, 104, 0.02) 0%, transparent 50%);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.11 0 0 0 0 0.095 0 0 0 0 0.078 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .app {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 0.1s forwards;
+  }
+
+  .mark {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    font-style: italic;
+  }
+
+  .mark::before {
+    content: '◍';
+    margin-right: 8px;
+    color: var(--coral);
+    font-style: normal;
+  }
+
+  .topbar-link {
+    font-size: 14px;
+    color: var(--ink-fade);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .topbar-link:hover { color: var(--coral); }
+
+  .hero {
+    opacity: 0;
+    animation: slideUp 0.6s ease-out 0.2s forwards;
+    margin-bottom: 36px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(46px, 8.5vw, 78px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    margin-bottom: 22px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--coral);
+    font-weight: 300;
+  }
+
+  .lede {
+    font-size: 18px;
+    color: var(--ink-soft);
+    max-width: 520px;
+    line-height: 1.5;
+  }
+
+  .check-form {
+    opacity: 0;
+    animation: slideUp 0.6s ease-out 0.35s forwards;
+    margin-bottom: 32px;
+  }
+
+  .platform-toggle {
+    display: inline-flex;
+    background: var(--paper-shadow);
+    padding: 4px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+    position: relative;
+    border: 1px solid var(--rule);
+  }
+
+  .platform-toggle button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 20px;
+    border: none;
+    background: transparent;
+    color: var(--ink-fade);
+    cursor: pointer;
+    border-radius: 100px;
+    transition: color 0.25s;
+    position: relative;
+    z-index: 2;
+    letter-spacing: -0.005em;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .platform-toggle button.active { color: var(--ink); }
+  .platform-toggle button svg { width: 14px; height: 14px; }
+
+  .toggle-slider {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    background: var(--card);
+    border-radius: 100px;
+    box-shadow: 0 1px 3px rgba(28, 24, 20, 0.08), 0 1px 1px rgba(28, 24, 20, 0.04);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .input-wrap {
+    flex: 1;
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .input-wrap:focus-within {
+    border-color: var(--ink);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .input-prefix {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--ink-fade);
+    font-size: 22px;
+    margin-right: 4px;
+    user-select: none;
+  }
+
+  #usernameInput {
+    font-family: inherit;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    background: transparent;
+    flex: 1;
+    width: 100%;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    padding: 0;
+    min-width: 0;
+  }
+
+  #usernameInput::placeholder { color: var(--ink-fade); opacity: 0.5; }
+
+  .btn-check {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0 28px;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    background: var(--ink);
+    color: var(--paper);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    letter-spacing: -0.005em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .btn-check:hover { transform: translateY(-1px); box-shadow: var(--shadow-lift); }
+  .btn-check:active { transform: translateY(0); }
+  .btn-check .btn-arrow { transition: transform 0.2s; }
+  .btn-check:hover .btn-arrow { transform: translateX(3px); }
+
+  .error {
+    color: var(--coral);
+    font-size: 14px;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  .results { margin-bottom: 32px; }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .result-card h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(26px, 4.5vw, 32px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .result-card h2 em {
+    font-style: italic;
+    color: var(--coral);
+    font-weight: 300;
+  }
+
+  .result-card p {
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+
+  .result-card p:last-of-type { margin-bottom: 0; }
+
+  .url-block {
+    background: var(--paper-shadow);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: 'DM Sans', monospace;
+    font-size: 14px;
+    color: var(--ink);
+    word-break: break-all;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .open-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--coral);
+    color: var(--paper);
+    padding: 12px 22px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+
+  .open-link:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift);
+    background: var(--coral-deep);
+  }
+
+  .open-link svg { width: 14px; height: 14px; }
+
+  .question-prompt {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin: 24px 0 14px;
+  }
+
+  .options {
+    display: grid;
+    gap: 10px;
+  }
+
+  .option {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px;
+    transition: all 0.2s;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  .option:hover {
+    border-color: var(--ink);
+    background: var(--card);
+    transform: translateX(2px);
+  }
+
+  .option-title {
+    font-weight: 500;
+    margin-bottom: 2px;
+    letter-spacing: -0.005em;
+  }
+
+  .option-sub {
+    font-size: 13px;
+    color: var(--ink-fade);
+  }
+
+  .verdict {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 32px 28px;
+    box-shadow: var(--shadow-lift);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .verdict::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+
+  .verdict.blocked::before { background: var(--coral); }
+  .verdict.not-blocked::before { background: var(--sage); }
+  .verdict.unsure::before { background: var(--ink-fade); }
+
+  .verdict-label {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-fade);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .verdict-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(30px, 5.5vw, 42px);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+  }
+
+  .verdict-title em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .verdict.blocked .verdict-title em { color: var(--coral); }
+  .verdict.not-blocked .verdict-title em { color: var(--sage); }
+  .verdict.unsure .verdict-title em { color: var(--ink-soft); }
+
+  .verdict-body {
+    color: var(--ink-soft);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  .verdict-body p { margin-bottom: 12px; }
+  .verdict-body p:last-child { margin-bottom: 0; }
+  .verdict-body strong { color: var(--ink); font-weight: 500; }
+
+  .verdict-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule);
+    padding: 11px 20px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .btn-secondary:hover {
+    background: var(--paper-shadow);
+    border-color: var(--ink-fade);
+    color: var(--ink);
+  }
+
+  .how-it-works {
+    border-top: 1px dashed var(--rule);
+    padding-top: 28px;
+    margin-top: 40px;
+    color: var(--ink-fade);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .how-it-works summary {
+    cursor: pointer;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-soft);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .how-it-works summary::-webkit-details-marker { display: none; }
+
+  .how-it-works summary::after {
+    content: '+';
+    margin-left: auto;
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
+    transition: transform 0.25s;
+    font-size: 22px;
+    color: var(--ink-fade);
+    line-height: 1;
+  }
+
+  .how-it-works[open] summary::after { transform: rotate(45deg); }
+  .how-it-works[open] summary { margin-bottom: 16px; }
+
+  .how-content { padding-bottom: 8px; }
+  .how-content p { margin-bottom: 10px; }
+  .how-content strong { color: var(--ink); font-weight: 500; }
+
+  footer {
+    margin-top: 36px;
+    padding-top: 20px;
+    font-size: 13px;
+    color: var(--ink-fade);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 560px) {
+    .app { padding: 24px 18px 50px; }
+    .topbar { margin-bottom: 44px; }
+    .input-row { flex-direction: column; }
+    .btn-check { padding: 16px 28px; justify-content: center; }
+    .result-card { padding: 24px 22px; }
+    .verdict { padding: 28px 22px; }
+  }
+
+  kbd {
+    background: var(--paper-shadow);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 12px;
+    font-family: inherit;
+  }
+</style>
+</head>
+<body>
+
+<main class="app">
+
+  <header class="topbar">
+    <div class="mark">blockcheck</div>
+    <a href="#how" class="topbar-link" onclick="openHow(event)">How it works</a>
+  </header>
+
+  <section class="hero">
+    <h1>Did they <em>block</em> you?</h1>
+    <p class="lede">A quiet way to find out — on Instagram or TikTok. No login, no installs, no guessing. Takes about thirty seconds.</p>
+  </section>
+
+  <form class="check-form" onsubmit="onCheck(event)" autocomplete="off">
+    <div class="platform-toggle" id="platformToggle">
+      <button type="button" class="active" data-platform="instagram">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/>
+          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+          <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+        </svg>
+        Instagram
+      </button>
+      <button type="button" data-platform="tiktok">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 3v2.5a4.5 4.5 0 0 0 4.5 4.5V12a7 7 0 0 1-4.5-1.6V16a5 5 0 1 1-5-5v2.6a2.4 2.4 0 1 0 2.4 2.4V3H16z" fill="currentColor"/>
+        </svg>
+        TikTok
+      </button>
+      <span class="toggle-slider" id="toggleSlider"></span>
+    </div>
+
+    <div class="input-row">
+      <div class="input-wrap">
+        <span class="input-prefix">@</span>
+        <input type="text" id="usernameInput" placeholder="their username" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      </div>
+      <button type="submit" class="btn-check">
+        Check
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+    <div class="error" id="usernameError"></div>
+  </form>
+
+  <section class="results" id="results"></section>
+
+  <details class="how-it-works" id="howItWorks">
+    <summary>How does this actually work?</summary>
+    <div class="how-content">
+      <p>When someone blocks you, the block applies to <strong>your account</strong> — not the rest of the internet. So if you open their profile in a logged-out browser, you can still see it. Even a "this account is private" lock screen counts: the profile <em>exists</em>.</p>
+      <p>That gives us a clean truth table:</p>
+      <p>→ <strong>You can't see them in your app, but they exist publicly</strong> = blocked.<br>
+         → <strong>You can't see them in your app, and they don't exist publicly</strong> = the account was deactivated, deleted, or renamed.</p>
+      <p>This site doesn't scrape, doesn't log in, and stores nothing. Your input never leaves your browser — we just generate the link and ask what you saw.</p>
+    </div>
+  </details>
+
+  <footer>
+    Not affiliated with Instagram or TikTok. Made with care, not data collection.
+  </footer>
+
+</main>
+
+<script>
+  const state = {
+    platform: 'instagram',
+    username: '',
+  };
+
+  const toggle = document.getElementById('platformToggle');
+  const slider = document.getElementById('toggleSlider');
+  const toggleButtons = toggle.querySelectorAll('button');
+
+  function moveSlider() {
+    const active = toggle.querySelector('button.active');
+    if (!active) return;
+    const r = active.getBoundingClientRect();
+    const wrap = toggle.getBoundingClientRect();
+    slider.style.left = (r.left - wrap.left) + 'px';
+    slider.style.width = r.width + 'px';
+  }
+
+  toggleButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      toggleButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.platform = btn.dataset.platform;
+      moveSlider();
+      const input = document.getElementById('usernameInput');
+      input.placeholder = state.platform === 'tiktok' ? 'their tiktok handle' : 'their instagram handle';
+    });
+  });
+
+  window.addEventListener('load', moveSlider);
+  window.addEventListener('resize', moveSlider);
+  if (document.fonts) document.fonts.ready.then(moveSlider);
+
+  function sanitizeUsername(raw) {
+    let s = raw.trim();
+    s = s.replace(/^@+/, '');
+    const igMatch = s.match(/instagram\.com\/([A-Za-z0-9._]+)/i);
+    const ttMatch = s.match(/tiktok\.com\/@([A-Za-z0-9._]+)/i);
+    if (igMatch) { s = igMatch[1]; }
+    else if (ttMatch) { s = ttMatch[1]; }
+    return s.replace(/\s+/g, '');
+  }
+
+  function isValidUsername(u) {
+    return /^[A-Za-z0-9._]{1,30}$/.test(u);
+  }
+
+  function switchPlatform(p) {
+    toggleButtons.forEach(b => {
+      b.classList.toggle('active', b.dataset.platform === p);
+    });
+    state.platform = p;
+    moveSlider();
+  }
+
+  function onCheck(e) {
+    e.preventDefault();
+    const raw = document.getElementById('usernameInput').value;
+    const errEl = document.getElementById('usernameError');
+
+    if (raw.match(/tiktok\.com/i) && state.platform !== 'tiktok') {
+      switchPlatform('tiktok');
+    } else if (raw.match(/instagram\.com/i) && state.platform !== 'instagram') {
+      switchPlatform('instagram');
+    }
+
+    const clean = sanitizeUsername(raw);
+
+    if (!clean) {
+      errEl.textContent = 'Type their username first.';
+      return;
+    }
+    if (!isValidUsername(clean)) {
+      errEl.textContent = 'Usernames usually only contain letters, numbers, dots, and underscores.';
+      return;
+    }
+    errEl.textContent = '';
+    state.username = clean;
+    document.getElementById('usernameInput').value = clean;
+
+    renderLinkCard();
+  }
+
+  function buildProfileUrl() {
+    const u = encodeURIComponent(state.username);
+    return state.platform === 'instagram'
+      ? `https://www.instagram.com/${u}/`
+      : `https://www.tiktok.com/@${u}`;
+  }
+
+  function renderLinkCard() {
+    const url = buildProfileUrl();
+    const platformName = state.platform === 'instagram' ? 'Instagram' : 'TikTok';
+
+    const html = `
+      <div class="result-card" id="linkCard">
+        <h2>Open this in a <em>private</em> tab on ${platformName}</h2>
+        <p>The trick: we look at their profile while logged out. If they blocked <em style="font-style:italic">you</em>, the block doesn't apply to a logged-out visitor — but if they deleted their account, it's gone for everyone.</p>
+        <div class="url-block">${url}</div>
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="open-link">
+          Open in new tab
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17L17 7M9 7h8v8"/>
+          </svg>
+        </a>
+        <p style="margin-top:16px;font-size:14px;color:var(--ink-fade);">Tip: long-press the link on mobile to open it in a private tab. On desktop, copy it into an incognito window (<kbd>Cmd/Ctrl + Shift + N</kbd>).</p>
+
+        <div class="question-prompt">Once you've looked — what did you see?</div>
+        <div class="options">
+          <button type="button" class="option" onclick="answer('exists')">
+            <div class="option-title">Their profile loaded normally</div>
+            <div class="option-sub">I can see their photo, bio, posts — or it says "this account is private"</div>
+          </button>
+          <button type="button" class="option" onclick="answer('gone')">
+            <div class="option-title">"Page not found" or "User not found"</div>
+            <div class="option-sub">A clear error — the profile doesn't seem to exist</div>
+          </button>
+          <button type="button" class="option" onclick="answer('unsure')">
+            <div class="option-title">I'm not sure what I'm looking at</div>
+            <div class="option-sub">Help me figure it out</div>
+          </button>
+        </div>
+      </div>
+    `;
+
+    const results = document.getElementById('results');
+    results.innerHTML = html;
+    setTimeout(() => {
+      document.getElementById('linkCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+
+  function answer(choice) {
+    const platformName = state.platform === 'instagram' ? 'Instagram' : 'TikTok';
+    const handle = '@' + state.username;
+    let verdictHTML = '';
+
+    if (choice === 'exists') {
+      verdictHTML = `
+        <div class="verdict blocked">
+          <div class="verdict-label">The verdict</div>
+          <h2 class="verdict-title">You've most likely <em>been blocked</em>.</h2>
+          <div class="verdict-body">
+            <p>${handle} exists publicly on ${platformName} — you can see their profile when logged out — but you can't see it from your account. That gap is the signature of a block.</p>
+            <p><strong>One caveat:</strong> if their account was already private and you used to follow them, an unfollow (without a block) would also hide their posts from you — but you'd still find their profile in search from your account. If they're missing from your search entirely, it's a block.</p>
+            <p>Sorry. That's not a fun answer to land on.</p>
+          </div>
+          <div class="verdict-actions">
+            <button class="btn-secondary" onclick="resetCheck()">Check someone else</button>
+          </div>
+        </div>
+      `;
+    } else if (choice === 'gone') {
+      verdictHTML = `
+        <div class="verdict not-blocked">
+          <div class="verdict-label">The verdict</div>
+          <h2 class="verdict-title">Probably <em>not a block</em>.</h2>
+          <div class="verdict-body">
+            <p>${handle} doesn't show up publicly on ${platformName} either. When a block is in play, the profile still exists for the rest of the internet — it just hides from <em>you</em>. Since it's hidden from everyone, the likely explanations are:</p>
+            <p>→ They <strong>deactivated</strong> their account (temporary).<br>
+               → They <strong>deleted</strong> it (permanent).<br>
+               → The account was suspended by ${platformName}.<br>
+               → They <strong>changed their username</strong> — old links break instantly.</p>
+            <p>If you're worried about the last one, try searching their real name or checking a mutual friend's followers list.</p>
+          </div>
+          <div class="verdict-actions">
+            <button class="btn-secondary" onclick="resetCheck()">Check someone else</button>
+          </div>
+        </div>
+      `;
+    } else {
+      verdictHTML = `
+        <div class="verdict unsure">
+          <div class="verdict-label">No problem</div>
+          <h2 class="verdict-title">Let's <em>look closer</em>.</h2>
+          <div class="verdict-body">
+            <p>Here's what to look for in that private tab:</p>
+            <p>→ <strong>Profile loads</strong> (photo, bio, post count visible) — even a "private account" lock screen counts. That means they <em>exist publicly</em>. Combined with you not seeing them in your app: it's a block.</p>
+            <p>→ <strong>"Sorry, this page isn't available" / "Couldn't find this account"</strong> — that's the platform saying the profile doesn't exist publicly. Most likely deactivated, deleted, or renamed.</p>
+            <p>Take another glance at the private tab, then pick one of the answers above.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    const old = document.getElementById('verdictHost');
+    if (old) old.remove();
+
+    const verdictHost = document.createElement('div');
+    verdictHost.id = 'verdictHost';
+    verdictHost.innerHTML = verdictHTML;
+    document.getElementById('linkCard').parentNode.appendChild(verdictHost);
+
+    setTimeout(() => {
+      verdictHost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+
+  function resetCheck() {
+    state.username = '';
+    document.getElementById('usernameInput').value = '';
+    document.getElementById('usernameError').textContent = '';
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('usernameInput').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function openHow(e) {
+    e.preventDefault();
+    const det = document.getElementById('howItWorks');
+    det.open = true;
+    det.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+</script>
+
+</body>
+</html>
