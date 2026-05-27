@@ -59,57 +59,140 @@ function decodeEntities(s) {
     .replace(/&gt;/g, '>');
 }
 
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Decision logic per platform.
-function decide(platform, status, html) {
-  // Sanity: super-short HTML usually means a redirect / error page.
-  const len = html ? html.length : 0;
+//
+// Why username-aware? Earlier versions matched generic substrings like
+// "Couldn't find this account" — but TikTok ships that string in its
+// i18n bundle on every page (including real profiles served to
+// data-center IPs), which caused false negatives. The robust signal
+// is the *specific* username appearing in a structural location:
+// canonical link, og:url, og:title, or a JSON field like uniqueId /
+// username / screen_name. A captcha stub or generic blocked-bot page
+// won't contain the username we asked about.
+function decide(platform, status, html, username) {
+  if (!html) return { exists: null, reason: 'no-html' };
+
+  const uEsc = escapeRegex(username);
 
   if (platform === 'instagram') {
     if (status === 404) return { exists: false, reason: 'http-404' };
-    // IG sometimes serves a generic "Page Not Found" with 200 status.
-    if (/Page Not Found/i.test(html) || /Sorry, this page isn['\u2019]t available/i.test(html)) {
-      return { exists: false, reason: 'ig-not-available' };
+
+    if (new RegExp(`"username"\\s*:\\s*"${uEsc}"`, 'i').test(html)) {
+      return { exists: true, reason: 'ig-username-json' };
     }
-    if (extractMeta(html, 'og:title') || extractMeta(html, 'al:ios:url')) {
-      return { exists: true, reason: 'og-title-present' };
+
+    const ogUrl = extractMeta(html, 'og:url');
+    if (ogUrl && new RegExp(`/${uEsc}/?(?:[?#]|$)`, 'i').test(ogUrl)) {
+      return { exists: true, reason: 'ig-og-url' };
     }
-    // If we got the IG login wall, we can't tell — treat as unknown.
-    if (/loginForm|"login_link"|Log in \\u2022 Instagram/i.test(html)) {
-      return { exists: null, reason: 'ig-login-wall' };
+
+    const ogTitle = extractMeta(html, 'og:title');
+    if (ogTitle && new RegExp(`\\(@${uEsc}\\)`, 'i').test(ogTitle)) {
+      return { exists: true, reason: 'ig-og-title' };
     }
-    return { exists: null, reason: 'inconclusive' };
+
+    if (new RegExp(`<link[^>]+rel=["']canonical["'][^>]+/${uEsc}/`, 'i').test(html)) {
+      return { exists: true, reason: 'ig-canonical' };
+    }
+
+    return { exists: null, reason: 'ig-no-profile-data' };
   }
 
   if (platform === 'tiktok') {
-    // TikTok returns 200 with a not-found page for missing usernames.
-    if (/Couldn['\u2019]t find this account/i.test(html)) {
-      return { exists: false, reason: 'tt-not-found' };
-    }
     if (status === 404) return { exists: false, reason: 'http-404' };
-    if (extractMeta(html, 'og:title') && !/TikTok\s*-\s*Make Your Day/i.test(extractMeta(html, 'og:title'))) {
-      return { exists: true, reason: 'og-title-present' };
+
+    if (new RegExp(`"uniqueId"\\s*:\\s*"${uEsc}"`, 'i').test(html)) {
+      return { exists: true, reason: 'tt-uniqueid' };
     }
-    if (status === 200 && len > 5000) return { exists: true, reason: 'page-rendered' };
-    return { exists: null, reason: 'inconclusive' };
+
+    const ogUrl = extractMeta(html, 'og:url');
+    if (ogUrl && new RegExp(`@${uEsc}(?:[/?#]|$)`, 'i').test(ogUrl)) {
+      return { exists: true, reason: 'tt-og-url' };
+    }
+
+    const ogTitle = extractMeta(html, 'og:title');
+    if (ogTitle && new RegExp(`@${uEsc}\\b`, 'i').test(ogTitle)) {
+      return { exists: true, reason: 'tt-og-title' };
+    }
+
+    if (new RegExp(`<link[^>]+rel=["']canonical["'][^>]+@${uEsc}(?:[/?#"']|$)`, 'i').test(html)) {
+      return { exists: true, reason: 'tt-canonical' };
+    }
+
+    return { exists: null, reason: 'tt-no-profile-data' };
   }
 
   if (platform === 'x') {
-    // X is the hardest — most profile data is JS-hydrated.
     if (status === 404) return { exists: false, reason: 'http-404' };
-    if (/This account doesn['\u2019]t exist/i.test(html) || /Hmm\\.\\.\\.this page doesn['\u2019]t exist/i.test(html)) {
-      return { exists: false, reason: 'x-not-found' };
-    }
+
     const ogTitle = extractMeta(html, 'og:title');
-    if (ogTitle && !/^X$/i.test(ogTitle.trim())) {
-      return { exists: true, reason: 'og-title-present' };
+    if (ogTitle && new RegExp(`@${uEsc}\\b`, 'i').test(ogTitle)) {
+      return { exists: true, reason: 'x-og-title' };
     }
-    return { exists: null, reason: 'inconclusive' };
+
+    if (new RegExp(`"screen_name"\\s*:\\s*"${uEsc}"`, 'i').test(html)) {
+      return { exists: true, reason: 'x-screen-name' };
+    }
+
+    return { exists: null, reason: 'x-no-profile-data' };
   }
 
   return { exists: null, reason: 'unknown-platform' };
 }
 
+// X-specific: query the public syndication CDN endpoint that Twitter's
+// embed widgets use. Returns a small JSON array — empty if the handle
+// doesn't exist, one entry if it does. No auth, no token, just a public
+// URL. Much more reliable than scraping x.com HTML, which is mostly
+// JS-hydrated and serves a generic shell to server-side fetches.
+async function lookupXViaSyndication(username) {
+  const url = `https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=${encodeURIComponent(username)}`;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const resp = await fetch(url, {
+      headers: { 'User-Agent': UA, 'Accept': 'application/json' },
+      signal: ctrl.signal,
+    });
+    clearTimeout(timer);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    if (!Array.isArray(data)) return null;
+    if (data.length === 0) return { exists: false, reason: 'syn-not-found', displayName: null };
+    const p = data[0];
+    return { exists: true, reason: 'syn-found', displayName: p.name || null };
+  } catch {
+    clearTimeout(timer);
+    return null;
+  }
+}
+
 async function lookup(platform, username) {
+  // X: try the public syndication endpoint first. If it answers
+  // definitively, we're done. If it times out or errors, fall through
+  // to scraping x.com HTML as a backup.
+  if (platform === 'x') {
+    const syn = await lookupXViaSyndication(username);
+    if (syn) {
+      return {
+        ok: true,
+        platform,
+        username,
+        url: `https://x.com/${encodeURIComponent(username)}`,
+        status: 200,
+        exists: syn.exists,
+        reason: syn.reason,
+        ogImage: null,
+        displayName: syn.displayName,
+        description: null,
+      };
+    }
+  }
+
   const url = buildUrl(platform, username);
   if (!url) return { ok: false, error: 'unknown_platform' };
 
@@ -130,7 +213,7 @@ async function lookup(platform, username) {
   let html = '';
   try { html = await resp.text(); } catch { /* ignore */ }
 
-  const decision = decide(platform, status, html);
+  const decision = decide(platform, status, html, username);
   const ogImage    = decision.exists ? extractMeta(html, 'og:image') : null;
   const ogTitle    = decision.exists ? extractMeta(html, 'og:title') : null;
   const ogDescription = decision.exists ? extractMeta(html, 'og:description') : null;
