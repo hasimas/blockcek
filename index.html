@@ -568,6 +568,20 @@
     line-height: 1.45;
   }
 
+  .choice-verdict {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px dashed var(--rule);
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    line-height: 1.4;
+  }
+  .choice-verdict-block { color: var(--coral-deep); }
+  .choice-verdict-safe  { color: var(--sage); }
+  .choice-block:hover .choice-mark { background: rgba(190, 68, 52, 0.16); }
+  .choice-safe:hover  .choice-mark { background: rgba(94, 116, 88, 0.18); }
+
   @media (max-width: 560px) {
     .choice-grid { grid-template-columns: 1fr; }
     .choice { min-height: 0; padding: 18px 18px; }
@@ -870,7 +884,7 @@
     color: var(--ink-soft);
     font-size: 15px;
     line-height: 1.55;
-    margin: 4px 0 20px;
+    margin: 4px 0 30px;
   }
   .callout-why strong { color: var(--ink); font-weight: 500; }
   .callout-why em {
@@ -1207,17 +1221,18 @@
 
         <div class="question-prompt">When you\u2019ve looked \u2014 what did you see on ${pName}?</div>
         <div class="choice-grid">
-          <button type="button" class="choice" onclick="answer('exists')">
+          <button type="button" class="choice choice-block" onclick="answer('exists')">
             <div class="choice-mark">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
             </div>
-            <div class="choice-title">Their profile is there</div>
-            <div class="choice-sub">Photo, bio, or a \u201cprivate account\u201d screen \u2014 anything that shows they exist</div>
+            <div class="choice-title">Their profile is visible</div>
+            <div class="choice-sub">A photo, bio, or even a \u201cthis account is private\u201d lock screen \u2014 anything you can see counts</div>
+            <div class="choice-verdict choice-verdict-block">\u2192 Most likely a block</div>
           </button>
-          <button type="button" class="choice" onclick="answer('gone')">
+          <button type="button" class="choice choice-safe" onclick="answer('gone')">
             <div class="choice-mark">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="9"/>
@@ -1225,7 +1240,8 @@
               </svg>
             </div>
             <div class="choice-title">Page not found</div>
-            <div class="choice-sub">An error \u2014 the profile doesn\u2019t seem to exist on ${pName}</div>
+            <div class="choice-sub">An error or \u201cthis page doesn\u2019t exist\u201d \u2014 no profile shows up</div>
+            <div class="choice-verdict choice-verdict-safe">\u2192 Not a block (deactivated, deleted, or renamed)</div>
           </button>
         </div>
       </div>
