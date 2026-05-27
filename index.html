@@ -551,9 +551,26 @@
   }
 
   .choice-mark svg { width: 18px; height: 18px; }
+  .choice-header .choice-mark { margin-bottom: 0; }
 
   .choice:nth-child(1) .choice-mark { background: rgba(190, 68, 52, 0.10); color: var(--coral); }
   .choice:nth-child(2) .choice-mark { background: rgba(94, 116, 88, 0.12); color: var(--sage); }
+
+  .choice-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .choice-tag {
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .choice-block .choice-tag { color: var(--coral); }
+  .choice-safe  .choice-tag { color: var(--sage); }
 
   /* Verdict is the primary message of each tile. */
   .choice-title {
@@ -881,8 +898,9 @@
     color: var(--ink-soft);
     font-size: 15px;
     line-height: 1.55;
-    margin: 4px 0 48px;
+    margin: 4px 0 0;
   }
+  .callout-why + .link-row { margin-top: 56px; }
   .callout-why strong { color: var(--ink); font-weight: 500; }
   .callout-why em {
     font-style: italic;
@@ -1219,21 +1237,27 @@
         <div class="question-prompt">When you\u2019ve looked \u2014 what did you see on ${pName}?</div>
         <div class="choice-grid">
           <button type="button" class="choice choice-block" onclick="answer('exists')">
-            <div class="choice-mark">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
+            <div class="choice-header">
+              <div class="choice-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
+              <span class="choice-tag">Profile exists</span>
             </div>
             <div class="choice-title">Most likely a block</div>
             <div class="choice-sub">Pick this if <strong>their profile shows up</strong> \u2014 a photo, bio, or even a \u201cthis account is private\u201d lock screen all count.</div>
           </button>
           <button type="button" class="choice choice-safe" onclick="answer('gone')">
-            <div class="choice-mark">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"/>
-                <path d="M8 8l8 8M16 8l-8 8"/>
-              </svg>
+            <div class="choice-header">
+              <div class="choice-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M8 8l8 8M16 8l-8 8"/>
+                </svg>
+              </div>
+              <span class="choice-tag">Profile not found</span>
             </div>
             <div class="choice-title">Not a block</div>
             <div class="choice-sub">Pick this if you see <strong>\u201cpage not found\u201d</strong> or an error. They were probably deactivated, deleted, or renamed.</div>
