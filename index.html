@@ -555,32 +555,29 @@
   .choice:nth-child(1) .choice-mark { background: rgba(190, 68, 52, 0.10); color: var(--coral); }
   .choice:nth-child(2) .choice-mark { background: rgba(94, 116, 88, 0.12); color: var(--sage); }
 
+  /* Verdict is the primary message of each tile. */
   .choice-title {
-    font-weight: 500;
-    font-size: 16px;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(22px, 4vw, 26px);
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    margin-top: 2px;
   }
+  .choice-block .choice-title { color: var(--coral-deep); }
+  .choice-safe  .choice-title { color: var(--sage); }
 
   .choice-sub {
-    font-size: 13px;
-    color: var(--ink-fade);
-    line-height: 1.45;
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
   }
+  .choice-sub strong { color: var(--ink); font-weight: 500; }
 
-  .choice-verdict {
-    margin-top: auto;
-    padding-top: 12px;
-    border-top: 1px dashed var(--rule);
-    font-size: 12.5px;
-    font-weight: 500;
-    letter-spacing: 0.005em;
-    line-height: 1.4;
-  }
-  .choice-verdict-block { color: var(--coral-deep); }
-  .choice-verdict-safe  { color: var(--sage); }
-  .choice-block:hover .choice-mark { background: rgba(190, 68, 52, 0.16); }
-  .choice-safe:hover  .choice-mark { background: rgba(94, 116, 88, 0.18); }
+  .choice-block:hover .choice-mark { background: rgba(190, 68, 52, 0.18); }
+  .choice-safe:hover  .choice-mark { background: rgba(94, 116, 88, 0.20); }
+  .choice-block:hover { border-color: var(--coral-deep); }
+  .choice-safe:hover  { border-color: var(--sage); }
 
   @media (max-width: 560px) {
     .choice-grid { grid-template-columns: 1fr; }
@@ -884,7 +881,7 @@
     color: var(--ink-soft);
     font-size: 15px;
     line-height: 1.55;
-    margin: 4px 0 30px;
+    margin: 4px 0 48px;
   }
   .callout-why strong { color: var(--ink); font-weight: 500; }
   .callout-why em {
@@ -1228,9 +1225,8 @@
                 <circle cx="12" cy="12" r="3"/>
               </svg>
             </div>
-            <div class="choice-title">Their profile is visible</div>
-            <div class="choice-sub">A photo, bio, or even a \u201cthis account is private\u201d lock screen \u2014 anything you can see counts</div>
-            <div class="choice-verdict choice-verdict-block">\u2192 Most likely a block</div>
+            <div class="choice-title">Most likely a block</div>
+            <div class="choice-sub">Pick this if <strong>their profile shows up</strong> \u2014 a photo, bio, or even a \u201cthis account is private\u201d lock screen all count.</div>
           </button>
           <button type="button" class="choice choice-safe" onclick="answer('gone')">
             <div class="choice-mark">
@@ -1239,9 +1235,8 @@
                 <path d="M8 8l8 8M16 8l-8 8"/>
               </svg>
             </div>
-            <div class="choice-title">Page not found</div>
-            <div class="choice-sub">An error or \u201cthis page doesn\u2019t exist\u201d \u2014 no profile shows up</div>
-            <div class="choice-verdict choice-verdict-safe">\u2192 Not a block (deactivated, deleted, or renamed)</div>
+            <div class="choice-title">Not a block</div>
+            <div class="choice-sub">Pick this if you see <strong>\u201cpage not found\u201d</strong> or an error. They were probably deactivated, deleted, or renamed.</div>
           </button>
         </div>
       </div>
