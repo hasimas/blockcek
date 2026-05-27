@@ -3,13 +3,87 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>BlockCheck — Did they block you?</title>
+<title>BlockCek — Did they block you?</title>
 <meta name="description" content="A simple, honest check to see if someone blocked you on Instagram, TikTok, or X. No login, no scraping, no data collected." />
 <meta name="theme-color" content="#FBFAF7" />
 
-<meta property="og:title" content="BlockCheck — Did they block you?" />
+<link rel="canonical" href="https://blockcek.com/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="keywords" content="instagram block checker, tiktok block checker, x block checker, twitter block checker, did someone block me, how to check if someone blocked me, blocked on instagram, blocked on tiktok, blocked on x" />
+<meta name="author" content="BlockCek" />
+
+<meta property="og:title" content="BlockCek — Did they block you?" />
 <meta property="og:description" content="A simple, honest check to see if someone blocked you on Instagram, TikTok, or X." />
 <meta property="og:type" content="website" />
+<meta property="og:url" content="https://blockcek.com/" />
+<meta property="og:image" content="https://blockcek.com/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="BlockCek" />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="BlockCek — Did they block you?" />
+<meta name="twitter:description" content="A simple, honest check to see if someone blocked you on Instagram, TikTok, or X." />
+<meta name="twitter:image" content="https://blockcek.com/og-image.png" />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "BlockCek",
+      "url": "https://blockcek.com/",
+      "description": "A free web tool that checks if someone has blocked you on Instagram, TikTok, or X by comparing your account view to a public view of their profile.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "featureList": [
+        "Check Instagram block status",
+        "Check TikTok block status",
+        "Check X (Twitter) block status",
+        "No login required",
+        "No tracking",
+        "Free to use"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does BlockCek tell if someone blocked me?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When someone blocks you, the block applies to your account, not the rest of the internet. If you can't see their profile from your account but the profile is still visible publicly (in a logged-out browser), that's a block. If the profile doesn't exist publicly either, the account was likely deactivated, deleted, suspended, or renamed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does BlockCek need my login?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. BlockCek never asks for your login credentials. It checks the public version of the profile server-side and compares it against what you describe seeing in your app."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is BlockCek free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. BlockCek is completely free, with no ads and no tracking. It is supported by voluntary donations."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -206,6 +280,17 @@
     font-style: italic;
     color: var(--coral);
     font-weight: 300;
+  }
+
+  .hero-sub {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--ink-soft);
+    margin: -8px 0 14px;
+    max-width: 520px;
   }
 
   .lede {
@@ -787,11 +872,11 @@
         <path d="M9.5 12V10a2.5 2.5 0 1 1 5 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
         <rect x="8.5" y="12" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/>
       </svg>
-      <span>BlockCheck</span>
+      <span>BlockCek</span>
     </div>
     <div class="topbar-right">
       <a href="#how" class="topbar-link" onclick="openHow(event)">How it works</a>
-      <a href="#donate" class="btn-donate" onclick="openDonate(event)" aria-label="Support the server">
+      <a href="https://ko-fi.com/blockcek" target="_blank" rel="noopener noreferrer" class="btn-donate" aria-label="Support the server on Ko-fi">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 8h13a3 3 0 0 1 0 6h-1"/>
           <path d="M4 8v7a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V8"/>
@@ -805,7 +890,8 @@
 
   <section class="hero">
     <h1>Did they <em>block</em> you?</h1>
-    <p class="lede">A quiet way to find out — on Instagram, TikTok, or X. No login, no installs, no guessing. Takes about thirty seconds.</p>
+    <h2 class="hero-sub">Check if someone blocked you on Instagram, TikTok, or X.</h2>
+    <p class="lede">A quiet way to find out — no login, no installs, no guessing. Takes about thirty seconds.</p>
   </section>
 
   <form class="check-form" onsubmit="onCheck(event)" autocomplete="off">
@@ -858,9 +944,9 @@
     </div>
     <div class="donate-strip-body">
       <div class="donate-strip-title">No ads. No tracking. Just server bills.</div>
-      <div class="donate-strip-sub">If BlockCheck saved you a spiral, a small tip keeps the lights on for the next person.</div>
+      <div class="donate-strip-sub">If BlockCek saved you a spiral, a small tip keeps the lights on for the next person.</div>
     </div>
-    <a href="https://ko-fi.com/" target="_blank" rel="noopener noreferrer" class="donate-strip-cta">Buy me a coffee →</a>
+    <a href="https://ko-fi.com/blockcek" target="_blank" rel="noopener noreferrer" class="donate-strip-cta">Buy me a coffee →</a>
   </aside>
 
   <details class="how-it-works" id="howItWorks">
@@ -883,7 +969,7 @@
 </main>
 
 <script>
-  const STORAGE_KEY = 'blockcheck.platform';
+  const STORAGE_KEY = 'blockcek.platform';
   const PLATFORMS = ['instagram', 'tiktok', 'x'];
   const PLATFORM_LABEL = { instagram: 'Instagram', tiktok: 'TikTok', x: 'X' };
 
@@ -1012,7 +1098,7 @@
     try {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 12000);
-      const url = `api/check?platform=${state.platform}&username=${encodeURIComponent(state.username)}`;
+      const url = `/api/check?platform=${state.platform}&username=${encodeURIComponent(state.username)}`;
       const resp = await fetch(url, { signal: ctrl.signal, headers: { 'Accept': 'application/json' } });
       clearTimeout(timer);
       if (resp.ok) {

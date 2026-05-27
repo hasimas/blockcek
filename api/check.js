@@ -1,4 +1,4 @@
-// BlockCheck — server-side profile lookup
+// BlockCek — server-side profile lookup
 // Works on Vercel, Netlify (with the included netlify.toml), and Cloudflare Workers
 // with a small wrapper. The handler shape below is the Vercel / Next.js pages-API style.
 //

@@ -1,25 +1,51 @@
-# CODING AGENTS: READ THIS FIRST
+# BlockCek
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+> Did they block you? A quiet, honest check for Instagram, TikTok, or X.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+**Live site:** [blockcek.com](https://blockcek.com)
 
-## What you should do — IMPORTANT
+BlockCek tells you whether someone has likely blocked you on Instagram, TikTok, or X — without asking for your login.
 
-**Read the chat transcripts first.** There are 2 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+## How it works
 
-**Read `project/Block Check v4.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+When someone blocks you, the block applies only to **your account** — not the rest of the internet. So:
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+- If their profile is still visible to a logged-out browser but you can't see it from your account → **block**.
+- If the profile doesn't exist publicly either → the account was likely **deactivated, deleted, suspended, or renamed**.
 
-## About the design files
+BlockCek does the public-side check for you server-side, then renders the verdict. If the lookup is inconclusive (login wall, JS-hydrated page), the page falls back to a one-tap manual flow.
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+## Project structure
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+```
+index.html                      The page (HTML + CSS + JS, single file)
+api/check.js                    Serverless function — public profile lookup
+robots.txt, sitemap.xml         SEO basics
+favicon.svg                     Browser tab icon
+og-image.png                    Social link preview (1200x630)
+apple-touch-icon.png            iOS home-screen icon (180x180)
+workflows/deploy_blockcek.md    Deploy SOP
+```
 
-## Bundle contents
+No build step. No framework. No dependencies to install.
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Block Checker` project files (HTML prototypes, assets, components)
+## Deploy
+
+Full steps in [`workflows/deploy_blockcek.md`](workflows/deploy_blockcek.md). Quick version (Vercel):
+
+1. Import this repo at [vercel.com/new](https://vercel.com/new).
+2. Accept defaults — no build command, no framework preset.
+3. Deploy.
+
+The function at `api/check.js` is auto-detected and reachable at `/api/check`.
+
+## Privacy stance
+
+- **No login.** You never sign in to anything.
+- **No tracking.** No analytics scripts, no cookies. The only client-side storage is a single `localStorage` key remembering your last platform pick.
+- **No data collection.** The handle you check is sent to the serverless function and not stored.
+- **No ads.** Supported by voluntary donations via [Ko-fi](https://ko-fi.com/blockcek).
+
+## Not affiliated
+
+BlockCek is an independent tool. It is not affiliated with, endorsed by, or sponsored by Instagram, TikTok, X, Meta, or ByteDance.
