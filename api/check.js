@@ -81,22 +81,20 @@ function decide(platform, status, html, username) {
   if (platform === 'instagram') {
     if (status === 404) return { exists: false, reason: 'http-404' };
 
+    // Positive: profile data with this username present
     if (new RegExp(`"username"\\s*:\\s*"${uEsc}"`, 'i').test(html)) {
       return { exists: true, reason: 'ig-username-json' };
     }
-
-    const ogUrl = extractMeta(html, 'og:url');
-    if (ogUrl && new RegExp(`/${uEsc}/?(?:[?#]|$)`, 'i').test(ogUrl)) {
-      return { exists: true, reason: 'ig-og-url' };
-    }
-
     const ogTitle = extractMeta(html, 'og:title');
     if (ogTitle && new RegExp(`\\(@${uEsc}\\)`, 'i').test(ogTitle)) {
       return { exists: true, reason: 'ig-og-title' };
     }
 
-    if (new RegExp(`<link[^>]+rel=["']canonical["'][^>]+/${uEsc}/`, 'i').test(html)) {
-      return { exists: true, reason: 'ig-canonical' };
+    // Negative: IG's not-found page. Safe to check here because the
+    // positive checks above didn't match — a real profile would have.
+    if (/Sorry, this page isn['’]t available/i.test(html) ||
+        /<title>Page Not Found[^<]*Instagram/i.test(html)) {
+      return { exists: false, reason: 'ig-page-not-available' };
     }
 
     return { exists: null, reason: 'ig-no-profile-data' };
@@ -105,22 +103,18 @@ function decide(platform, status, html, username) {
   if (platform === 'tiktok') {
     if (status === 404) return { exists: false, reason: 'http-404' };
 
+    // Positive
     if (new RegExp(`"uniqueId"\\s*:\\s*"${uEsc}"`, 'i').test(html)) {
       return { exists: true, reason: 'tt-uniqueid' };
     }
-
-    const ogUrl = extractMeta(html, 'og:url');
-    if (ogUrl && new RegExp(`@${uEsc}(?:[/?#]|$)`, 'i').test(ogUrl)) {
-      return { exists: true, reason: 'tt-og-url' };
-    }
-
     const ogTitle = extractMeta(html, 'og:title');
     if (ogTitle && new RegExp(`@${uEsc}\\b`, 'i').test(ogTitle)) {
       return { exists: true, reason: 'tt-og-title' };
     }
 
-    if (new RegExp(`<link[^>]+rel=["']canonical["'][^>]+@${uEsc}(?:[/?#"']|$)`, 'i').test(html)) {
-      return { exists: true, reason: 'tt-canonical' };
+    // Negative — only reached when no positive signal matched.
+    if (/Couldn['’]t find this account/i.test(html)) {
+      return { exists: false, reason: 'tt-not-found' };
     }
 
     return { exists: null, reason: 'tt-no-profile-data' };
@@ -129,13 +123,19 @@ function decide(platform, status, html, username) {
   if (platform === 'x') {
     if (status === 404) return { exists: false, reason: 'http-404' };
 
+    // Positive
     const ogTitle = extractMeta(html, 'og:title');
     if (ogTitle && new RegExp(`@${uEsc}\\b`, 'i').test(ogTitle)) {
       return { exists: true, reason: 'x-og-title' };
     }
-
     if (new RegExp(`"screen_name"\\s*:\\s*"${uEsc}"`, 'i').test(html)) {
       return { exists: true, reason: 'x-screen-name' };
+    }
+
+    // Negative
+    if (/This account doesn['’]t exist/i.test(html) ||
+        /Hmm[\.…]+this page doesn['’]t exist/i.test(html)) {
+      return { exists: false, reason: 'x-not-found' };
     }
 
     return { exists: null, reason: 'x-no-profile-data' };
