@@ -1676,7 +1676,7 @@
       cls = 'blocked';
       headline = `You\u2019ve most likely <em>been blocked</em>.`;
       body = `${handle} is visible publicly on ${pName} \u2014 but you can\u2019t see them from your account. That gap is the signature of a block.`;
-      footnote = `Edge case: if they have a private account and you used to follow them, an unfollow (without a block) would also hide their posts \u2014 but you\u2019d still find their profile in your in-app search. If search comes up empty too, it\u2019s a block.`;
+      footnote = `One thing worth ruling out first: if their account is private and you used to follow them, them simply unfollowing you would also hide their posts \u2014 that\u2019s not a block. To tell the difference, search their handle in the app. If their profile still shows up there, you were just unfollowed. If you can\u2019t find them at all, that\u2019s a block.`;
     } else {
       cls = 'not-blocked';
       headline = `Probably <em>not a block</em>.`;
