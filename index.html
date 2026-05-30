@@ -85,6 +85,7 @@
 }
 </script>
 
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:opsz,wght@9..40,300..700&display=swap" rel="stylesheet">
@@ -551,50 +552,22 @@
   }
 
   .choice-mark svg { width: 18px; height: 18px; }
-  .choice-header .choice-mark { margin-bottom: 0; }
 
   .choice:nth-child(1) .choice-mark { background: rgba(190, 68, 52, 0.10); color: var(--coral); }
   .choice:nth-child(2) .choice-mark { background: rgba(94, 116, 88, 0.12); color: var(--sage); }
 
-  .choice-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 4px;
-  }
-
-  .choice-tag {
-    font-size: 11px;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-  .choice-block .choice-tag { color: var(--coral); }
-  .choice-safe  .choice-tag { color: var(--sage); }
-
-  /* Verdict is the primary message of each tile. */
   .choice-title {
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: clamp(22px, 4vw, 26px);
-    letter-spacing: -0.015em;
-    line-height: 1.1;
-    margin-top: 2px;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
   }
-  .choice-block .choice-title { color: var(--coral-deep); }
-  .choice-safe  .choice-title { color: var(--sage); }
 
   .choice-sub {
-    font-size: 14px;
-    color: var(--ink-soft);
-    line-height: 1.5;
+    font-size: 13px;
+    color: var(--ink-fade);
+    line-height: 1.45;
   }
-  .choice-sub strong { color: var(--ink); font-weight: 500; }
-
-  .choice-block:hover .choice-mark { background: rgba(190, 68, 52, 0.18); }
-  .choice-safe:hover  .choice-mark { background: rgba(94, 116, 88, 0.20); }
-  .choice-block:hover { border-color: var(--coral-deep); }
-  .choice-safe:hover  { border-color: var(--sage); }
 
   @media (max-width: 560px) {
     .choice-grid { grid-template-columns: 1fr; }
@@ -607,6 +580,321 @@
     font-size: 18px;
     color: var(--ink-soft);
     margin: 24px 0 14px;
+  }
+
+  /* Manual check redesign */
+  .incognito-note {
+    background: var(--paper-shadow);
+    border-left: 3px solid var(--coral);
+    border-radius: 4px 14px 14px 4px;
+    padding: 18px 22px;
+    margin: 4px 0 28px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    font-size: 16px;
+  }
+  .incognito-note strong { color: var(--ink); font-weight: 600; }
+  .incognito-note em { font-style: italic; }
+
+  .open-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--coral);
+    color: var(--paper);
+    padding: 16px 28px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: -0.005em;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .open-profile:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift);
+    background: var(--coral-deep);
+  }
+  .open-profile svg { width: 16px; height: 16px; }
+
+  .manual-help {
+    font-size: 15px;
+    color: var(--ink-fade);
+    line-height: 1.6;
+    margin: 16px 0 28px;
+    max-width: 62ch;
+  }
+  .manual-help strong { color: var(--ink-soft); font-weight: 500; }
+  .copy-inline {
+    color: var(--coral-deep);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(190, 68, 52, 0.45);
+    cursor: pointer;
+    background: none;
+    border-top: none; border-left: none; border-right: none;
+    font: inherit;
+    padding: 0;
+  }
+  .copy-inline:hover { color: var(--coral); border-bottom-color: var(--coral); }
+
+  .outcome-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .outcome {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 22px 22px 24px;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .outcome:hover {
+    border-color: var(--ink);
+    background: var(--card);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .outcome-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .outcome-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .outcome-icon svg { width: 17px; height: 17px; }
+  .outcome-tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-fade);
+  }
+  .outcome-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .outcome-body {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .outcome-body strong { color: var(--ink); font-weight: 600; }
+  .outcome.is-block .outcome-icon { background: rgba(190, 68, 52, 0.10); color: var(--coral); }
+  .outcome.is-block .outcome-title { color: var(--coral); }
+  .outcome.is-gone .outcome-icon { background: rgba(94, 116, 88, 0.14); color: var(--sage); }
+  .outcome.is-gone .outcome-title { color: var(--sage); }
+
+  @media (max-width: 560px) {
+    .outcome-grid { grid-template-columns: 1fr; }
+    .outcome-title { font-size: 26px; }
+  }
+
+  /* Guided steps */
+  .check-steps {
+    list-style: none;
+    margin: 20px 0 26px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .check-steps li {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+    font-size: 16px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+  .step-n {
+    flex-shrink: 0;
+    width: 25px; height: 25px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: var(--paper);
+    font-size: 13px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+  .check-steps strong { color: var(--ink); font-weight: 600; }
+  .check-steps .muted { color: var(--ink-fade); font-size: 13.5px; display: block; margin-top: 3px; }
+  .check-steps .muted strong { color: var(--ink-soft); }
+
+  .open-profile.copy-primary { border: none; cursor: pointer; }
+
+  .open-anyway {
+    display: inline-block;
+    margin-top: -8px;
+    margin-bottom: 24px;
+    background: none; border: none; padding: 0;
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink-fade);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-style: dotted;
+    cursor: pointer;
+  }
+  .open-anyway:hover { color: var(--coral); }
+
+  .ghost-link {
+    display: block;
+    margin-top: 18px;
+    background: none; border: none; padding: 0;
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink-fade);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-style: dotted;
+    cursor: pointer;
+  }
+  .ghost-link:hover { color: var(--coral); }
+
+  .app-help {
+    display: none;
+    margin-top: 14px;
+    padding: 16px 18px;
+    background: rgba(190, 68, 52, 0.06);
+    border: 1px solid rgba(190, 68, 52, 0.18);
+    border-radius: 12px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .app-help.show { display: block; }
+  .app-help strong { color: var(--ink); font-weight: 600; }
+
+  /* Screen previews inside outcome cards */
+  .screen-preview {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    height: 156px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+  }
+  .sp-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 11px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 11px;
+    color: var(--ink-fade);
+    flex-shrink: 0;
+  }
+  .sp-chev {
+    width: 7px; height: 7px;
+    border-left: 1.5px solid var(--ink-fade);
+    border-bottom: 1.5px solid var(--ink-fade);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+  .sp-handle { font-weight: 600; letter-spacing: -0.01em; }
+  .sp-body { flex: 1; padding: 11px; min-height: 0; }
+
+  .sp-profile-top { display: flex; align-items: center; gap: 11px; margin-bottom: 11px; }
+  .sp-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #E4DFD3 0%, #D8D2C4 100%);
+  }
+  .sp-lines { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .sp-line { height: 7px; border-radius: 4px; background: var(--paper-shadow); }
+  .sp-line.w70 { width: 70%; }
+  .sp-line.w45 { width: 45%; }
+  .sp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .sp-grid > div { aspect-ratio: 1 / 1; background: var(--paper-shadow); border-radius: 3px; }
+  .sp-lock {
+    position: relative;
+  }
+  .sp-lock-badge {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px;
+    color: var(--ink-fade);
+    font-size: 10px;
+  }
+
+  .sp-error {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+    padding: 8px 18px;
+  }
+  .sp-error-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-fade);
+  }
+  .sp-error-icon svg { width: 16px; height: 16px; }
+  .sp-error-title { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); line-height: 1.25; }
+  .sp-error-sub { font-size: 10.5px; color: var(--ink-fade); line-height: 1.35; }
+
+  .outcome { padding-top: 16px; }
+
+  /* Per-platform preview variants */
+  .sp-banner {
+    height: 30px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #E0DBCF 0%, #D1CABA 100%);
+  }
+  .sp-x-head {
+    display: flex; gap: 11px; align-items: flex-end;
+    margin-top: -18px; margin-bottom: 11px;
+  }
+  .sp-avatar-ring { border: 2.5px solid var(--card); box-sizing: border-box; }
+  .sp-tweet {
+    padding: 8px 0;
+    border-top: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .sp-tt-top {
+    display: flex; flex-direction: column; align-items: center;
+    margin-bottom: 10px;
+  }
+  .sp-tt-grid > div {
+    aspect-ratio: 3 / 4;
+    position: relative;
+  }
+  .sp-play {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0; height: 0;
+    border-left: 7px solid rgba(70, 65, 58, 0.38);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
   }
 
   .options {
@@ -887,49 +1175,8 @@
     padding: 5px 12px;
     margin-bottom: 14px;
   }
-
-  /* Manual-fallback explainer + open button helpers */
-  .callout-why {
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-left: 3px solid var(--coral);
-    border-radius: 12px;
-    padding: 14px 16px;
-    color: var(--ink-soft);
-    font-size: 15px;
-    line-height: 1.55;
-    margin: 4px 0 0;
-  }
-  .callout-why + .link-row { margin-top: 32px; }
-  .callout-why strong { color: var(--ink); font-weight: 500; }
-  .callout-why em {
-    font-style: italic;
-    color: var(--coral-deep);
-    font-weight: 400;
-  }
-
-  .link-hint {
-    font-size: 13px;
-    color: var(--ink-fade);
-    line-height: 1.6;
-    margin: 12px 0 24px;
-  }
-  .link-hint strong { color: var(--ink-soft); font-weight: 500; }
-
-  .link-inline {
-    font-family: inherit;
-    font-size: inherit;
-    color: var(--coral-deep);
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 3px;
-  }
-  .link-inline:hover { color: var(--coral); }
 </style>
+
 </head>
 <body>
 
@@ -1042,6 +1289,120 @@
   const STORAGE_KEY = 'blockcek.platform';
   const PLATFORMS = ['instagram', 'tiktok', 'x'];
   const PLATFORM_LABEL = { instagram: 'Instagram', tiktok: 'TikTok', x: 'X' };
+
+  // ---- Device / browser detection (for tailored open instructions) ----
+  const UA = navigator.userAgent || '';
+  const isIOS = /iPad|iPhone|iPod/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(UA);
+  const isMobile = isIOS || isAndroid || (window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 820);
+  const isChromeIOS = /CriOS/.test(UA);
+  const isFirefox = /Firefox|FxiOS/.test(UA);
+  const isSamsung = /SamsungBrowser/.test(UA);
+
+  function privateTabHint() {
+    if (isIOS && !isChromeIOS && !isFirefox) return 'In Safari, tap the tabs button (the two overlapping squares) → <strong>Private</strong> → the <strong>+</strong>.';
+    if (isChromeIOS || (isAndroid && /Chrome/.test(UA) && !isSamsung)) return 'Tap the <strong>⋮</strong> menu → <strong>New Incognito tab</strong>.';
+    if (isFirefox) return 'Tap the <strong>⋮</strong> menu → <strong>New private tab</strong>.';
+    if (isSamsung) return 'Tap the <strong>tabs</strong> button → turn on <strong>Secret mode</strong>.';
+    return 'Open your browser’s menu and start a <strong>new private / incognito tab</strong>.';
+  }
+
+  function errorScreenCopy() {
+    if (state.platform === 'tiktok') return { title: 'Couldn’t find this account', sub: 'Looks like this account doesn’t exist.' };
+    if (state.platform === 'x')      return { title: 'This account doesn’t exist', sub: 'Try searching for another.' };
+    return { title: 'Sorry, this page isn’t available.', sub: 'The link may be broken, or the page may have been removed.' };
+  }
+
+  function profilePreviewHTML() {
+    const bar = `<div class="sp-bar"><span class="sp-chev"></span><span class="sp-handle">@${state.username}</span></div>`;
+    let inner;
+    if (state.platform === 'x') {
+      inner = `
+        <div class="sp-banner"></div>
+        <div class="sp-body">
+          <div class="sp-x-head">
+            <div class="sp-avatar sp-avatar-ring"></div>
+            <div class="sp-lines">
+              <div class="sp-line w45"></div>
+              <div class="sp-line w70"></div>
+            </div>
+          </div>
+          <div class="sp-tweet"><div class="sp-line w70"></div><div class="sp-line w45"></div></div>
+          <div class="sp-tweet"><div class="sp-line w70"></div><div class="sp-line w45"></div></div>
+        </div>`;
+    } else if (state.platform === 'tiktok') {
+      inner = `
+        <div class="sp-body">
+          <div class="sp-tt-top">
+            <div class="sp-avatar"></div>
+            <div class="sp-line w45" style="margin-top:7px"></div>
+          </div>
+          <div class="sp-grid sp-tt-grid">
+            <div><span class="sp-play"></span></div><div><span class="sp-play"></span></div><div><span class="sp-play"></span></div>
+          </div>
+        </div>`;
+    } else {
+      inner = `
+        <div class="sp-body">
+          <div class="sp-profile-top">
+            <div class="sp-avatar"></div>
+            <div class="sp-lines">
+              <div class="sp-line w45"></div>
+              <div class="sp-line w70"></div>
+            </div>
+          </div>
+          <div class="sp-grid">
+            <div></div><div></div><div></div>
+          </div>
+        </div>`;
+    }
+    return `<div class="screen-preview" aria-hidden="true">${bar}${inner}</div>`;
+  }
+
+  function errorPreviewHTML() {
+    const c = errorScreenCopy();
+    return `
+      <div class="screen-preview" aria-hidden="true">
+        <div class="sp-bar"><span class="sp-chev"></span><span class="sp-handle">@${state.username}</span></div>
+        <div class="sp-error">
+          <div class="sp-error-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"/><path d="M8 11h6"/>
+            </svg>
+          </div>
+          <div class="sp-error-title">${c.title}</div>
+          <div class="sp-error-sub">${c.sub}</div>
+        </div>
+      </div>`;
+  }
+
+  function openInstructionsHTML(url, pName) {
+    if (isMobile) {
+      return `
+        <button type="button" class="open-profile copy-primary" onclick="copyUrl(event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="11" height="11" rx="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          <span id="copyLabel" data-default="Copy their link">Copy their link</span>
+        </button>
+        <ol class="check-steps">
+          <li><span class="step-n">1</span><div>Open a <strong>private / incognito tab</strong>.<span class="muted">${privateTabHint()}</span></div></li>
+          <li><span class="step-n">2</span><div><strong>Paste the link</strong> in the address bar and go.<span class="muted">Pasting it yourself stops the ${pName} app from grabbing the link — which is what we want.</span></div></li>
+          <li><span class="step-n">3</span><div>Come back to <strong>this tab</strong> and tap what you saw.<span class="muted">Everything stays right here while you look.</span></div></li>
+        </ol>`;
+    }
+    return `
+      <a href="${url}" target="_blank" rel="noopener noreferrer" class="open-profile">
+        Open ${pName} profile
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17L17 7"/><path d="M8 7h9v9"/>
+        </svg>
+      </a>
+      <p class="manual-help">
+        Right-click the button → <strong>“Open in Private Window”</strong> so your login doesn’t follow you in. Or open a private window first ( <kbd>Cmd/Ctrl + Shift + N</kbd> ) and click it there. <button type="button" class="copy-inline" onclick="copyUrl(event)"><span id="copyLabel" data-default="Or copy URL">Or copy URL</span></button>
+      </p>`;
+  }
 
   const savedPlatform = (() => {
     try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
@@ -1215,53 +1576,51 @@
 
     const html = `
       <div class="result-card" id="linkCard">
-        <div class="fallback-tag">Auto-check unavailable — quick manual check</div>
-        <h2>Look at their profile <em>without your account</em>.</h2>
+        <div class="fallback-tag">Quick check · about 30 seconds</div>
+        <h2>See their profile <em>while logged out</em>.</h2>
 
-        <p class="callout-why">
-          <strong>Open it in Incognito.</strong> A block hides them from <em>you</em>, not from the public \u2014 so we need to see the page without your login.
-        </p>
-
-        <div class="link-row">
-          <a href="${url}" target="_blank" rel="noopener noreferrer" class="open-link" id="openProfileBtn">
-            <span>Open ${pName} profile</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M7 17L17 7M17 7H8M17 7V16"/>
-            </svg>
-          </a>
-        </div>
-        <div class="link-hint">
-          <strong>Right-click the button \u2192 \u201cOpen in Private Window\u201d</strong> so your login doesn\u2019t follow you in. Or open a private window first (<kbd>Cmd/Ctrl + Shift + N</kbd>) and click it there. <button type="button" class="link-inline" onclick="copyUrl()"><span id="copyLabel">Or copy URL</span></button>
+        <div class="incognito-note">
+          <strong>A block only hides them from you</strong> — not from the public. So we just need to peek at their page <em>without your account</em> signed in.
         </div>
 
-        <div class="question-prompt">When you\u2019ve looked \u2014 what did you see on ${pName}?</div>
-        <div class="choice-grid">
-          <button type="button" class="choice choice-block" onclick="answer('exists')">
-            <div class="choice-header">
-              <div class="choice-mark">
+        ${openInstructionsHTML(url, pName)}
+        ${isMobile ? '<button type="button" class="open-anyway" onclick="openAnyway()">My browser isn’t logged into ' + pName + ' — just open it →</button>' : ''}
+
+        <div class="question-prompt">When you’ve looked — which screen did you land on?</div>
+        <div class="outcome-grid">
+          <button type="button" class="outcome is-block" onclick="answer('exists')">
+            ${profilePreviewHTML()}
+            <div class="outcome-head">
+              <span class="outcome-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
                   <circle cx="12" cy="12" r="3"/>
                 </svg>
-              </div>
-              <span class="choice-tag">Profile exists</span>
+              </span>
+              <span class="outcome-tag">Their profile loaded</span>
             </div>
-            <div class="choice-title">Most likely a block</div>
-            <div class="choice-sub">Pick this if <strong>their profile shows up</strong> \u2014 a photo, bio, or even a \u201cthis account is private\u201d lock screen all count.</div>
+            <div class="outcome-title">Most likely a block</div>
+            <div class="outcome-body">Their photos, posts, or even a “this account is private” lock — <strong>anything that shows they exist</strong>.</div>
           </button>
-          <button type="button" class="choice choice-safe" onclick="answer('gone')">
-            <div class="choice-header">
-              <div class="choice-mark">
+          <button type="button" class="outcome is-gone" onclick="answer('gone')">
+            ${errorPreviewHTML()}
+            <div class="outcome-head">
+              <span class="outcome-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="9"/>
                   <path d="M8 8l8 8M16 8l-8 8"/>
                 </svg>
-              </div>
-              <span class="choice-tag">Profile not found</span>
+              </span>
+              <span class="outcome-tag">Page not found</span>
             </div>
-            <div class="choice-title">Not a block</div>
-            <div class="choice-sub">Pick this if you see <strong>\u201cpage not found\u201d</strong> or an error. They were probably deactivated, deleted, or renamed.</div>
+            <div class="outcome-title">Not a block</div>
+            <div class="outcome-body">A <strong>“page isn’t available”</strong> error. They were probably deactivated, deleted, or renamed.</div>
           </button>
+        </div>
+
+        <button type="button" class="ghost-link" onclick="showAppHelp()">The app opened, or it asked me to log in →</button>
+        <div class="app-help" id="appHelp">
+          That screen is <strong>logged in</strong>, so it can’t tell us anything — a block would hide them there too. Go back and open the link in a <strong>private / incognito tab</strong> using the steps above, then judge <em>that</em> page.
         </div>
       </div>
     `;
@@ -1271,12 +1630,22 @@
     setTimeout(() => softScrollTo(document.getElementById('linkCard')), 80);
   }
 
-  function copyUrl() {
+  function showAppHelp() {
+    const el = document.getElementById('appHelp');
+    if (el) { el.classList.add('show'); softScrollTo(el); }
+  }
+
+  function openAnyway() {
+    window.open(buildProfileUrl(), '_blank', 'noopener');
+  }
+
+  function copyUrl(e) {
+    if (e && e.preventDefault) e.preventDefault();
     const url = buildProfileUrl();
     const label = document.getElementById('copyLabel');
-    const original = label ? label.textContent : 'Copy URL';
     const finish = (ok) => {
       if (!label) return;
+      const original = label.getAttribute('data-default') || 'Copy URL';
       label.textContent = ok ? 'Copied \u2713' : 'Press Ctrl+C';
       setTimeout(() => { label.textContent = original; }, 1600);
     };
