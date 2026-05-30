@@ -1273,8 +1273,7 @@
       <p>That gives us a clean truth table:</p>
       <p>→ <strong>You can't see them in your app, but they exist publicly</strong> = blocked.<br>
          → <strong>You can't see them in your app, and they don't exist publicly</strong> = the account was deactivated, deleted, or renamed.</p>
-      <p>
-</p>
+      <p><strong>What about an unfollow?</strong> If their account is private and you used to follow them, an unfollow would hide their posts too — but you'd still see their profile and a "this account is private" wall. If even that is gone from your view, it's a block, not an unfollow.</p>
     </div>
   </details>
 
@@ -1676,7 +1675,7 @@
       cls = 'blocked';
       headline = `You\u2019ve most likely <em>been blocked</em>.`;
       body = `${handle} is visible publicly on ${pName} \u2014 but you can\u2019t see them from your account. That gap is the signature of a block.`;
-      footnote = `One thing worth ruling out first: if their account is private and you used to follow them, them simply unfollowing you would also hide their posts \u2014 that\u2019s not a block. To tell the difference, search their handle in the app. If their profile still shows up there, you were just unfollowed. If you can\u2019t find them at all, that\u2019s a block.`;
+      footnote = '';
     } else {
       cls = 'not-blocked';
       headline = `Probably <em>not a block</em>.`;
@@ -1702,7 +1701,7 @@
         <div class="verdict-body">
           <p>${body}</p>
           ${proof}
-          <p style="font-size:14px;color:var(--ink-fade);">${footnote}</p>
+          ${footnote ? `<p style="font-size:14px;color:var(--ink-fade);">${footnote}</p>` : ''}
         </div>
         <div class="verdict-actions">
           <button class="btn-secondary" type="button" onclick="resetCheck()">Check someone else</button>
