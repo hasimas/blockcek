@@ -1304,7 +1304,8 @@
 
   function privateTabHint() {
     if (isIOS && !isChromeIOS && !isFirefox) return 'In Safari, tap the <strong>tabs</strong> button (two overlapping squares, bottom-right) → tap <strong>Private</strong> in the bottom bar → then tap the <strong>+</strong> to open a new private tab.';
-    if (isChromeIOS || (isAndroid && /Chrome/.test(UA) && !isSamsung)) return 'Tap the <strong>⋮</strong> menu → <strong>New Incognito tab</strong>.';
+    if (isChromeIOS) return 'In Chrome, tap the <strong>⋯</strong> menu (bottom-right) → <strong>New Incognito Tab</strong>.';
+    if (isAndroid && /Chrome/.test(UA) && !isSamsung) return 'In Chrome, tap the <strong>⋮</strong> menu (top-right) → <strong>New incognito tab</strong>.';
     if (isFirefox) return 'Tap the <strong>⋮</strong> menu → <strong>New private tab</strong>.';
     if (isSamsung) return 'Tap the <strong>tabs</strong> button → turn on <strong>Secret mode</strong>.';
     return 'Open your browser’s menu and start a <strong>new private / incognito tab</strong>.';
