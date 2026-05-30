@@ -150,7 +150,11 @@
     letter-spacing: -0.01em;
     font-style: italic;
     color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s;
   }
+  .mark:hover { color: var(--coral); }
+  .mark:hover .brand-shield { color: var(--coral-deep); }
 
   .mark .brand-shield {
     width: 22px; height: 22px;
@@ -1183,14 +1187,14 @@
 <main class="app">
 
   <header class="topbar">
-    <div class="mark">
+    <a href="/" class="mark" onclick="goHome(event)" aria-label="BlockCek — back to home">
       <svg class="brand-shield" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 2L4 5v6c0 4.6 3.1 8.5 8 11 4.9-2.5 8-6.4 8-11V5l-8-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
         <path d="M9.5 12V10a2.5 2.5 0 1 1 5 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
         <rect x="8.5" y="12" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.4" fill="none"/>
       </svg>
       <span>BlockCek</span>
-    </div>
+    </a>
     <div class="topbar-right">
       <a href="#how" class="topbar-link" onclick="openHow(event)">How it works</a>
       <a href="https://ko-fi.com/blockcek" target="_blank" rel="noopener noreferrer" class="btn-donate" aria-label="Support the server on Ko-fi">
@@ -1725,6 +1729,21 @@
     document.getElementById('usernameError').textContent = '';
     document.getElementById('results').innerHTML = '';
     document.getElementById('usernameInput').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Logo click: soft-reset to home without a full page reload.
+  // Falls through to the anchor's href="/" if JS is unavailable
+  // or the user opens it in a new tab.
+  function goHome(e) {
+    if (e) e.preventDefault();
+    state.username = '';
+    const input = document.getElementById('usernameInput');
+    const err = document.getElementById('usernameError');
+    const results = document.getElementById('results');
+    if (input) input.value = '';
+    if (err) err.textContent = '';
+    if (results) results.innerHTML = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
